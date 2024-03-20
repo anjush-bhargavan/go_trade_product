@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package pb;
+
+option go_package = "./";
+
+service ProductService {
+    rpc CreateProduct(Prodcut) returns (ProductResponse);
+}
+
+message Prodcut {
+    string Name = 1;
+    uint32 Seller_ID = 2;
+    uint32 Category = 3;
+    uint32 Base_Price = 4;
+    string Description = 5;
+    bool   Bidding_Type = 6;
+    string Bidding_Start_Time = 7;
+    string Bidiing_End_Time = 8;
+    string Listed_On = 9;
+    
+}
+
+message ProductResponse {
+    string Status = 1;
+    string Message = 2;
+    string Error = 3;
+}
