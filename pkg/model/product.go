@@ -19,4 +19,5 @@ type Product struct {
 	BiddingStartTime time.Time `gorm:"not null"`
 	BiddingEndTime   time.Time `gorm:"not null"`
 	ListedOn         time.Time `gorm:"not null"`
+	Status           string    `gorm:"default:listed"`
 }

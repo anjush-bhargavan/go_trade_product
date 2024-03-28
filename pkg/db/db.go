@@ -28,6 +28,8 @@ func ConnectDB(config *config.Config) *gorm.DB {
 
 	err = DB.AutoMigrate(
 		&model.Product{},
+		&model.Category{},
+		&model.Bid{},
 	)
 
 	if err != nil {

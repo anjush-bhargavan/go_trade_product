@@ -19,14 +19,38 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	ProductService_CreateProduct_FullMethodName = "/pb.ProductService/CreateProduct"
+	ProductService_CreateProduct_FullMethodName         = "/pb.ProductService/CreateProduct"
+	ProductService_FindProductByID_FullMethodName       = "/pb.ProductService/FindProductByID"
+	ProductService_FindProductByCategory_FullMethodName = "/pb.ProductService/FindProductByCategory"
+	ProductService_FindAllProducts_FullMethodName       = "/pb.ProductService/FindAllProducts"
+	ProductService_EditProduct_FullMethodName           = "/pb.ProductService/EditProduct"
+	ProductService_RemoveProduct_FullMethodName         = "/pb.ProductService/RemoveProduct"
+	ProductService_CreateCategory_FullMethodName        = "/pb.ProductService/CreateCategory"
+	ProductService_FindCategoryByID_FullMethodName      = "/pb.ProductService/FindCategoryByID"
+	ProductService_FindAllCategories_FullMethodName     = "/pb.ProductService/FindAllCategories"
+	ProductService_EditCategory_FullMethodName          = "/pb.ProductService/EditCategory"
+	ProductService_RemoveCategory_FullMethodName        = "/pb.ProductService/RemoveCategory"
+	ProductService_CreateBid_FullMethodName             = "/pb.ProductService/CreateBid"
+	ProductService_FetchBids_FullMethodName             = "/pb.ProductService/FetchBids"
 )
 
 // ProductServiceClient is the client API for ProductService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ProductServiceClient interface {
-	CreateProduct(ctx context.Context, in *Prodcut, opts ...grpc.CallOption) (*ProductResponse, error)
+	CreateProduct(ctx context.Context, in *Product, opts ...grpc.CallOption) (*ProductResponse, error)
+	FindProductByID(ctx context.Context, in *PrID, opts ...grpc.CallOption) (*Product, error)
+	FindProductByCategory(ctx context.Context, in *PrID, opts ...grpc.CallOption) (*ProductList, error)
+	FindAllProducts(ctx context.Context, in *ProductNoParam, opts ...grpc.CallOption) (*ProductList, error)
+	EditProduct(ctx context.Context, in *Product, opts ...grpc.CallOption) (*Product, error)
+	RemoveProduct(ctx context.Context, in *PrIDs, opts ...grpc.CallOption) (*ProductResponse, error)
+	CreateCategory(ctx context.Context, in *Category, opts ...grpc.CallOption) (*ProductResponse, error)
+	FindCategoryByID(ctx context.Context, in *PrID, opts ...grpc.CallOption) (*Category, error)
+	FindAllCategories(ctx context.Context, in *ProductNoParam, opts ...grpc.CallOption) (*CategoryList, error)
+	EditCategory(ctx context.Context, in *Category, opts ...grpc.CallOption) (*Category, error)
+	RemoveCategory(ctx context.Context, in *PrID, opts ...grpc.CallOption) (*ProductResponse, error)
+	CreateBid(ctx context.Context, in *Bid, opts ...grpc.CallOption) (*ProductResponse, error)
+	FetchBids(ctx context.Context, in *PrID, opts ...grpc.CallOption) (*BidList, error)
 }
 
 type productServiceClient struct {
@@ -37,9 +61,117 @@ func NewProductServiceClient(cc grpc.ClientConnInterface) ProductServiceClient {
 	return &productServiceClient{cc}
 }
 
-func (c *productServiceClient) CreateProduct(ctx context.Context, in *Prodcut, opts ...grpc.CallOption) (*ProductResponse, error) {
+func (c *productServiceClient) CreateProduct(ctx context.Context, in *Product, opts ...grpc.CallOption) (*ProductResponse, error) {
 	out := new(ProductResponse)
 	err := c.cc.Invoke(ctx, ProductService_CreateProduct_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *productServiceClient) FindProductByID(ctx context.Context, in *PrID, opts ...grpc.CallOption) (*Product, error) {
+	out := new(Product)
+	err := c.cc.Invoke(ctx, ProductService_FindProductByID_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *productServiceClient) FindProductByCategory(ctx context.Context, in *PrID, opts ...grpc.CallOption) (*ProductList, error) {
+	out := new(ProductList)
+	err := c.cc.Invoke(ctx, ProductService_FindProductByCategory_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *productServiceClient) FindAllProducts(ctx context.Context, in *ProductNoParam, opts ...grpc.CallOption) (*ProductList, error) {
+	out := new(ProductList)
+	err := c.cc.Invoke(ctx, ProductService_FindAllProducts_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *productServiceClient) EditProduct(ctx context.Context, in *Product, opts ...grpc.CallOption) (*Product, error) {
+	out := new(Product)
+	err := c.cc.Invoke(ctx, ProductService_EditProduct_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *productServiceClient) RemoveProduct(ctx context.Context, in *PrIDs, opts ...grpc.CallOption) (*ProductResponse, error) {
+	out := new(ProductResponse)
+	err := c.cc.Invoke(ctx, ProductService_RemoveProduct_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *productServiceClient) CreateCategory(ctx context.Context, in *Category, opts ...grpc.CallOption) (*ProductResponse, error) {
+	out := new(ProductResponse)
+	err := c.cc.Invoke(ctx, ProductService_CreateCategory_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *productServiceClient) FindCategoryByID(ctx context.Context, in *PrID, opts ...grpc.CallOption) (*Category, error) {
+	out := new(Category)
+	err := c.cc.Invoke(ctx, ProductService_FindCategoryByID_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *productServiceClient) FindAllCategories(ctx context.Context, in *ProductNoParam, opts ...grpc.CallOption) (*CategoryList, error) {
+	out := new(CategoryList)
+	err := c.cc.Invoke(ctx, ProductService_FindAllCategories_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *productServiceClient) EditCategory(ctx context.Context, in *Category, opts ...grpc.CallOption) (*Category, error) {
+	out := new(Category)
+	err := c.cc.Invoke(ctx, ProductService_EditCategory_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *productServiceClient) RemoveCategory(ctx context.Context, in *PrID, opts ...grpc.CallOption) (*ProductResponse, error) {
+	out := new(ProductResponse)
+	err := c.cc.Invoke(ctx, ProductService_RemoveCategory_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *productServiceClient) CreateBid(ctx context.Context, in *Bid, opts ...grpc.CallOption) (*ProductResponse, error) {
+	out := new(ProductResponse)
+	err := c.cc.Invoke(ctx, ProductService_CreateBid_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *productServiceClient) FetchBids(ctx context.Context, in *PrID, opts ...grpc.CallOption) (*BidList, error) {
+	out := new(BidList)
+	err := c.cc.Invoke(ctx, ProductService_FetchBids_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -50,7 +182,19 @@ func (c *productServiceClient) CreateProduct(ctx context.Context, in *Prodcut, o
 // All implementations must embed UnimplementedProductServiceServer
 // for forward compatibility
 type ProductServiceServer interface {
-	CreateProduct(context.Context, *Prodcut) (*ProductResponse, error)
+	CreateProduct(context.Context, *Product) (*ProductResponse, error)
+	FindProductByID(context.Context, *PrID) (*Product, error)
+	FindProductByCategory(context.Context, *PrID) (*ProductList, error)
+	FindAllProducts(context.Context, *ProductNoParam) (*ProductList, error)
+	EditProduct(context.Context, *Product) (*Product, error)
+	RemoveProduct(context.Context, *PrIDs) (*ProductResponse, error)
+	CreateCategory(context.Context, *Category) (*ProductResponse, error)
+	FindCategoryByID(context.Context, *PrID) (*Category, error)
+	FindAllCategories(context.Context, *ProductNoParam) (*CategoryList, error)
+	EditCategory(context.Context, *Category) (*Category, error)
+	RemoveCategory(context.Context, *PrID) (*ProductResponse, error)
+	CreateBid(context.Context, *Bid) (*ProductResponse, error)
+	FetchBids(context.Context, *PrID) (*BidList, error)
 	mustEmbedUnimplementedProductServiceServer()
 }
 
@@ -58,8 +202,44 @@ type ProductServiceServer interface {
 type UnimplementedProductServiceServer struct {
 }
 
-func (UnimplementedProductServiceServer) CreateProduct(context.Context, *Prodcut) (*ProductResponse, error) {
+func (UnimplementedProductServiceServer) CreateProduct(context.Context, *Product) (*ProductResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateProduct not implemented")
+}
+func (UnimplementedProductServiceServer) FindProductByID(context.Context, *PrID) (*Product, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method FindProductByID not implemented")
+}
+func (UnimplementedProductServiceServer) FindProductByCategory(context.Context, *PrID) (*ProductList, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method FindProductByCategory not implemented")
+}
+func (UnimplementedProductServiceServer) FindAllProducts(context.Context, *ProductNoParam) (*ProductList, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method FindAllProducts not implemented")
+}
+func (UnimplementedProductServiceServer) EditProduct(context.Context, *Product) (*Product, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method EditProduct not implemented")
+}
+func (UnimplementedProductServiceServer) RemoveProduct(context.Context, *PrIDs) (*ProductResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RemoveProduct not implemented")
+}
+func (UnimplementedProductServiceServer) CreateCategory(context.Context, *Category) (*ProductResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateCategory not implemented")
+}
+func (UnimplementedProductServiceServer) FindCategoryByID(context.Context, *PrID) (*Category, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method FindCategoryByID not implemented")
+}
+func (UnimplementedProductServiceServer) FindAllCategories(context.Context, *ProductNoParam) (*CategoryList, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method FindAllCategories not implemented")
+}
+func (UnimplementedProductServiceServer) EditCategory(context.Context, *Category) (*Category, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method EditCategory not implemented")
+}
+func (UnimplementedProductServiceServer) RemoveCategory(context.Context, *PrID) (*ProductResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RemoveCategory not implemented")
+}
+func (UnimplementedProductServiceServer) CreateBid(context.Context, *Bid) (*ProductResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateBid not implemented")
+}
+func (UnimplementedProductServiceServer) FetchBids(context.Context, *PrID) (*BidList, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method FetchBids not implemented")
 }
 func (UnimplementedProductServiceServer) mustEmbedUnimplementedProductServiceServer() {}
 
@@ -75,7 +255,7 @@ func RegisterProductServiceServer(s grpc.ServiceRegistrar, srv ProductServiceSer
 }
 
 func _ProductService_CreateProduct_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Prodcut)
+	in := new(Product)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -87,7 +267,223 @@ func _ProductService_CreateProduct_Handler(srv interface{}, ctx context.Context,
 		FullMethod: ProductService_CreateProduct_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ProductServiceServer).CreateProduct(ctx, req.(*Prodcut))
+		return srv.(ProductServiceServer).CreateProduct(ctx, req.(*Product))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ProductService_FindProductByID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PrID)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProductServiceServer).FindProductByID(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ProductService_FindProductByID_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProductServiceServer).FindProductByID(ctx, req.(*PrID))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ProductService_FindProductByCategory_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PrID)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProductServiceServer).FindProductByCategory(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ProductService_FindProductByCategory_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProductServiceServer).FindProductByCategory(ctx, req.(*PrID))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ProductService_FindAllProducts_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ProductNoParam)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProductServiceServer).FindAllProducts(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ProductService_FindAllProducts_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProductServiceServer).FindAllProducts(ctx, req.(*ProductNoParam))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ProductService_EditProduct_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Product)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProductServiceServer).EditProduct(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ProductService_EditProduct_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProductServiceServer).EditProduct(ctx, req.(*Product))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ProductService_RemoveProduct_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PrIDs)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProductServiceServer).RemoveProduct(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ProductService_RemoveProduct_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProductServiceServer).RemoveProduct(ctx, req.(*PrIDs))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ProductService_CreateCategory_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Category)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProductServiceServer).CreateCategory(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ProductService_CreateCategory_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProductServiceServer).CreateCategory(ctx, req.(*Category))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ProductService_FindCategoryByID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PrID)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProductServiceServer).FindCategoryByID(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ProductService_FindCategoryByID_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProductServiceServer).FindCategoryByID(ctx, req.(*PrID))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ProductService_FindAllCategories_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ProductNoParam)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProductServiceServer).FindAllCategories(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ProductService_FindAllCategories_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProductServiceServer).FindAllCategories(ctx, req.(*ProductNoParam))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ProductService_EditCategory_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Category)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProductServiceServer).EditCategory(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ProductService_EditCategory_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProductServiceServer).EditCategory(ctx, req.(*Category))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ProductService_RemoveCategory_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PrID)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProductServiceServer).RemoveCategory(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ProductService_RemoveCategory_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProductServiceServer).RemoveCategory(ctx, req.(*PrID))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ProductService_CreateBid_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Bid)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProductServiceServer).CreateBid(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ProductService_CreateBid_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProductServiceServer).CreateBid(ctx, req.(*Bid))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ProductService_FetchBids_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PrID)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProductServiceServer).FetchBids(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ProductService_FetchBids_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProductServiceServer).FetchBids(ctx, req.(*PrID))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -102,6 +498,54 @@ var ProductService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CreateProduct",
 			Handler:    _ProductService_CreateProduct_Handler,
+		},
+		{
+			MethodName: "FindProductByID",
+			Handler:    _ProductService_FindProductByID_Handler,
+		},
+		{
+			MethodName: "FindProductByCategory",
+			Handler:    _ProductService_FindProductByCategory_Handler,
+		},
+		{
+			MethodName: "FindAllProducts",
+			Handler:    _ProductService_FindAllProducts_Handler,
+		},
+		{
+			MethodName: "EditProduct",
+			Handler:    _ProductService_EditProduct_Handler,
+		},
+		{
+			MethodName: "RemoveProduct",
+			Handler:    _ProductService_RemoveProduct_Handler,
+		},
+		{
+			MethodName: "CreateCategory",
+			Handler:    _ProductService_CreateCategory_Handler,
+		},
+		{
+			MethodName: "FindCategoryByID",
+			Handler:    _ProductService_FindCategoryByID_Handler,
+		},
+		{
+			MethodName: "FindAllCategories",
+			Handler:    _ProductService_FindAllCategories_Handler,
+		},
+		{
+			MethodName: "EditCategory",
+			Handler:    _ProductService_EditCategory_Handler,
+		},
+		{
+			MethodName: "RemoveCategory",
+			Handler:    _ProductService_RemoveCategory_Handler,
+		},
+		{
+			MethodName: "CreateBid",
+			Handler:    _ProductService_CreateBid_Handler,
+		},
+		{
+			MethodName: "FetchBids",
+			Handler:    _ProductService_FetchBids_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

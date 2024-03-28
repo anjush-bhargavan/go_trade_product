@@ -37,3 +37,21 @@ func (p *ProductRepository) FindProductByCategory(CategoryID uint) (*[]model.Pro
 	}
 	return &Product, nil
 }
+
+// FindAllProducts method finds all Products from database.
+func (p *ProductRepository) FindAllProducts() (*[]model.Product, error) {
+	var Products []model.Product
+
+	if err := p.DB.Find(&Products).Error; err != nil {
+		return nil, err
+	}
+	return &Products, nil
+}
+
+// DeleteProduct method delete the Product from database using product ID.
+func (p *ProductRepository) DeleteProduct(productID uint)  error {
+	if err := p.DB.Delete(model.Product{},productID).Error; err != nil {
+		return  err
+	}
+	return nil
+}
