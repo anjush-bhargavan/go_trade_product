@@ -30,6 +30,8 @@ func ConnectDB(config *config.Config) *gorm.DB {
 		&model.Product{},
 		&model.Category{},
 		&model.Bid{},
+		&model.Bidding{},
+		&model.Orders{},
 	)
 
 	if err != nil {

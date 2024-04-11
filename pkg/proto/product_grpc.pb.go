@@ -32,6 +32,8 @@ const (
 	ProductService_RemoveCategory_FullMethodName        = "/pb.ProductService/RemoveCategory"
 	ProductService_CreateBid_FullMethodName             = "/pb.ProductService/CreateBid"
 	ProductService_FetchBids_FullMethodName             = "/pb.ProductService/FetchBids"
+	ProductService_CreatePayment_FullMethodName         = "/pb.ProductService/CreatePayment"
+	ProductService_PaymentSuccess_FullMethodName        = "/pb.ProductService/PaymentSuccess"
 )
 
 // ProductServiceClient is the client API for ProductService service.
@@ -51,6 +53,8 @@ type ProductServiceClient interface {
 	RemoveCategory(ctx context.Context, in *PrID, opts ...grpc.CallOption) (*ProductResponse, error)
 	CreateBid(ctx context.Context, in *Bid, opts ...grpc.CallOption) (*ProductResponse, error)
 	FetchBids(ctx context.Context, in *PrID, opts ...grpc.CallOption) (*BidList, error)
+	CreatePayment(ctx context.Context, in *Bid, opts ...grpc.CallOption) (*PaymentResponse, error)
+	PaymentSuccess(ctx context.Context, in *Payment, opts ...grpc.CallOption) (*ProductResponse, error)
 }
 
 type productServiceClient struct {
@@ -178,6 +182,24 @@ func (c *productServiceClient) FetchBids(ctx context.Context, in *PrID, opts ...
 	return out, nil
 }
 
+func (c *productServiceClient) CreatePayment(ctx context.Context, in *Bid, opts ...grpc.CallOption) (*PaymentResponse, error) {
+	out := new(PaymentResponse)
+	err := c.cc.Invoke(ctx, ProductService_CreatePayment_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *productServiceClient) PaymentSuccess(ctx context.Context, in *Payment, opts ...grpc.CallOption) (*ProductResponse, error) {
+	out := new(ProductResponse)
+	err := c.cc.Invoke(ctx, ProductService_PaymentSuccess_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ProductServiceServer is the server API for ProductService service.
 // All implementations must embed UnimplementedProductServiceServer
 // for forward compatibility
@@ -195,6 +217,8 @@ type ProductServiceServer interface {
 	RemoveCategory(context.Context, *PrID) (*ProductResponse, error)
 	CreateBid(context.Context, *Bid) (*ProductResponse, error)
 	FetchBids(context.Context, *PrID) (*BidList, error)
+	CreatePayment(context.Context, *Bid) (*PaymentResponse, error)
+	PaymentSuccess(context.Context, *Payment) (*ProductResponse, error)
 	mustEmbedUnimplementedProductServiceServer()
 }
 
@@ -240,6 +264,12 @@ func (UnimplementedProductServiceServer) CreateBid(context.Context, *Bid) (*Prod
 }
 func (UnimplementedProductServiceServer) FetchBids(context.Context, *PrID) (*BidList, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method FetchBids not implemented")
+}
+func (UnimplementedProductServiceServer) CreatePayment(context.Context, *Bid) (*PaymentResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreatePayment not implemented")
+}
+func (UnimplementedProductServiceServer) PaymentSuccess(context.Context, *Payment) (*ProductResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method PaymentSuccess not implemented")
 }
 func (UnimplementedProductServiceServer) mustEmbedUnimplementedProductServiceServer() {}
 
@@ -488,6 +518,42 @@ func _ProductService_FetchBids_Handler(srv interface{}, ctx context.Context, dec
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ProductService_CreatePayment_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Bid)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProductServiceServer).CreatePayment(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ProductService_CreatePayment_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProductServiceServer).CreatePayment(ctx, req.(*Bid))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ProductService_PaymentSuccess_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Payment)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProductServiceServer).PaymentSuccess(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ProductService_PaymentSuccess_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProductServiceServer).PaymentSuccess(ctx, req.(*Payment))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // ProductService_ServiceDesc is the grpc.ServiceDesc for ProductService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -546,6 +612,14 @@ var ProductService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "FetchBids",
 			Handler:    _ProductService_FetchBids_Handler,
+		},
+		{
+			MethodName: "CreatePayment",
+			Handler:    _ProductService_CreatePayment_Handler,
+		},
+		{
+			MethodName: "PaymentSuccess",
+			Handler:    _ProductService_PaymentSuccess_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

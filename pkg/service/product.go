@@ -1,11 +1,17 @@
 package service
 
 import (
+	"context"
+	"encoding/json"
 	"errors"
+	"fmt"
 	"time"
 
+	"github.com/anjush-bhargavan/go_trade_product/pkg/clients/rabbitmq"
+	userpb "github.com/anjush-bhargavan/go_trade_product/pkg/clients/user/pb"
 	"github.com/anjush-bhargavan/go_trade_product/pkg/model"
 	pb "github.com/anjush-bhargavan/go_trade_product/pkg/proto"
+	"github.com/anjush-bhargavan/go_trade_product/utils"
 )
 
 // AddProductService will have our business logic to add product details to database.“
@@ -53,7 +59,7 @@ func (a *ProductService) AddProductService(p *pb.Product) (*pb.ProductResponse, 
 		ListedOn:         listedOn,
 	}
 
-	err = a.Repo.CreateProduct(&product)
+	id, err := a.Repo.CreateProduct(&product)
 	if err != nil {
 		return &pb.ProductResponse{
 			Status:  pb.ProductResponse_ERROR,
@@ -61,6 +67,49 @@ func (a *ProductService) AddProductService(p *pb.Product) (*pb.ProductResponse, 
 			Payload: &pb.ProductResponse_Error{Error: err.Error()},
 		}, err
 	}
+
+	var bidTable *[]model.Bids
+	bidData, err := json.Marshal(&bidTable)
+	if err != nil {
+		return &pb.ProductResponse{
+			Status:  pb.ProductResponse_ERROR,
+			Message: "error in marshaling data",
+			Payload: &pb.ProductResponse_Error{Error: err.Error()},
+		}, err
+	}
+	bids := model.Bidding{
+		ProductID: id,
+		Bids:      bidData,
+	}
+
+	err = a.Repo.CreateBidTable(&bids)
+	if err != nil {
+		return &pb.ProductResponse{
+			Status:  pb.ProductResponse_ERROR,
+			Message: "Error creating bid table",
+			Payload: &pb.ProductResponse_Error{Error: err.Error()},
+		}, err
+	}
+
+	ctx := context.Background()
+	users, err := a.UserClient.ViewWatchlistUsers(ctx, &userpb.ID{ID: uint32(category.ID)})
+	if err != nil {
+		return &pb.ProductResponse{
+			Status:  pb.ProductResponse_ERROR,
+			Message: "Error calling category rpc in user service",
+			Payload: &pb.ProductResponse_Error{Error: err.Error()},
+		}, err
+	}
+
+	msg := utils.ProductNotification(product,category.Name)
+
+	subject := fmt.Sprintf("New Product Added to Category: %s", category.Name)
+
+	for _, user := range users.Users {
+		go rabbitmq.SendMail(user.Email,msg,subject)
+	}
+
+	a.cron.ScheduleJob(product.BiddingEndTime,id)
 
 	return &pb.ProductResponse{
 		Status:  pb.ProductResponse_OK,
@@ -215,9 +264,8 @@ func (a *ProductService) FindAllProductsService(p *pb.ProductNoParam) (*pb.Produ
 
 	return &pb.ProductList{
 		Products: products,
-	},nil
+	}, nil
 }
-
 
 // FindProductsByCategoryService handle the user to get all products by category ID.
 func (a *ProductService) FindProductsByCategoryService(p *pb.PrID) (*pb.ProductList, error) {
@@ -252,5 +300,5 @@ func (a *ProductService) FindProductsByCategoryService(p *pb.PrID) (*pb.ProductL
 
 	return &pb.ProductList{
 		Products: products,
-	},nil
+	}, nil
 }

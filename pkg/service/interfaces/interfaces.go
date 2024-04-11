@@ -20,4 +20,7 @@ type ProductServiceInter interface{
 
 	CreateBidService(p *pb.Bid) (*pb.ProductResponse, error)
 	FetchBidsServie(p *pb.PrID) (*pb.BidList, error)
+
+	PaymentService(p *pb.Bid) (*pb.PaymentResponse, error)
+	PaymentSuccessService(p *pb.Payment) (*pb.ProductResponse, error)
 }

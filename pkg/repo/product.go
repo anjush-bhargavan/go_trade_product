@@ -3,11 +3,11 @@ package repo
 import "github.com/anjush-bhargavan/go_trade_product/pkg/model"
 
 // CreateProduct method for creating a new Product in db
-func (p *ProductRepository) CreateProduct(Product *model.Product) error {
+func (p *ProductRepository) CreateProduct(Product *model.Product) (uint,error) {
 	if err := p.DB.Create(&Product).Error; err != nil {
-		return err
+		return 0,err
 	}
-	return nil
+	return Product.ID,nil
 }
 
 // FindProductByID method finds the Product from database using primary key

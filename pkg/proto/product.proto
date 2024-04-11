@@ -20,17 +20,40 @@ service ProductService {
 
     rpc CreateBid(Bid) returns(ProductResponse);
     rpc FetchBids(PrID) returns(BidList);
+
+    rpc CreatePayment(Bid) returns(PaymentResponse);
+    rpc PaymentSuccess(Payment) returns(ProductResponse);
+}
+
+message PaymentResponse {
+    uint32 Product_ID = 1;
+    string User_Name = 2;
+    string User_Email = 3;
+    float Amount = 4;
+    string Order_ID = 5;
+}
+
+message Payment {
+    uint32 User_ID = 1;
+    string Payment_ID = 2;
+    float Amount = 3;
+    uint32 Product_ID = 4;
 }
 
 message BidList {
-    repeated Bid Bids = 1;
+    uint32 Bid_ID = 1;
+    uint32 Product_ID = 2;
+    string Product_Name = 3;
+    uint32 Seller_ID = 4;
+    float Base_Price = 5;
+    repeated Bid Bids = 6;
 }
 
 message Bid {
-    uint32 Bid_ID = 1;
-    uint32 User_ID = 2;
+    // uint32 Bid_ID = 1;
+    uint32 User_ID = 1;
     uint32 Product_ID = 3;
-    float Amount = 4; 
+    float Amount = 2; 
 }
 
 message CategoryList {
