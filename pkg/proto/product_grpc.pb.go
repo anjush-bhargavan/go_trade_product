@@ -34,6 +34,9 @@ const (
 	ProductService_FetchBids_FullMethodName             = "/pb.ProductService/FetchBids"
 	ProductService_CreatePayment_FullMethodName         = "/pb.ProductService/CreatePayment"
 	ProductService_PaymentSuccess_FullMethodName        = "/pb.ProductService/PaymentSuccess"
+	ProductService_OrderHistory_FullMethodName          = "/pb.ProductService/OrderHistory"
+	ProductService_FindOrder_FullMethodName             = "/pb.ProductService/FindOrder"
+	ProductService_FIndOrdersByUser_FullMethodName      = "/pb.ProductService/FIndOrdersByUser"
 )
 
 // ProductServiceClient is the client API for ProductService service.
@@ -55,6 +58,9 @@ type ProductServiceClient interface {
 	FetchBids(ctx context.Context, in *PrID, opts ...grpc.CallOption) (*BidList, error)
 	CreatePayment(ctx context.Context, in *Bid, opts ...grpc.CallOption) (*PaymentResponse, error)
 	PaymentSuccess(ctx context.Context, in *Payment, opts ...grpc.CallOption) (*ProductResponse, error)
+	OrderHistory(ctx context.Context, in *ProductNoParam, opts ...grpc.CallOption) (*OrderList, error)
+	FindOrder(ctx context.Context, in *PrID, opts ...grpc.CallOption) (*Order, error)
+	FIndOrdersByUser(ctx context.Context, in *PrID, opts ...grpc.CallOption) (*OrderList, error)
 }
 
 type productServiceClient struct {
@@ -200,6 +206,33 @@ func (c *productServiceClient) PaymentSuccess(ctx context.Context, in *Payment, 
 	return out, nil
 }
 
+func (c *productServiceClient) OrderHistory(ctx context.Context, in *ProductNoParam, opts ...grpc.CallOption) (*OrderList, error) {
+	out := new(OrderList)
+	err := c.cc.Invoke(ctx, ProductService_OrderHistory_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *productServiceClient) FindOrder(ctx context.Context, in *PrID, opts ...grpc.CallOption) (*Order, error) {
+	out := new(Order)
+	err := c.cc.Invoke(ctx, ProductService_FindOrder_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *productServiceClient) FIndOrdersByUser(ctx context.Context, in *PrID, opts ...grpc.CallOption) (*OrderList, error) {
+	out := new(OrderList)
+	err := c.cc.Invoke(ctx, ProductService_FIndOrdersByUser_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ProductServiceServer is the server API for ProductService service.
 // All implementations must embed UnimplementedProductServiceServer
 // for forward compatibility
@@ -219,6 +252,9 @@ type ProductServiceServer interface {
 	FetchBids(context.Context, *PrID) (*BidList, error)
 	CreatePayment(context.Context, *Bid) (*PaymentResponse, error)
 	PaymentSuccess(context.Context, *Payment) (*ProductResponse, error)
+	OrderHistory(context.Context, *ProductNoParam) (*OrderList, error)
+	FindOrder(context.Context, *PrID) (*Order, error)
+	FIndOrdersByUser(context.Context, *PrID) (*OrderList, error)
 	mustEmbedUnimplementedProductServiceServer()
 }
 
@@ -270,6 +306,15 @@ func (UnimplementedProductServiceServer) CreatePayment(context.Context, *Bid) (*
 }
 func (UnimplementedProductServiceServer) PaymentSuccess(context.Context, *Payment) (*ProductResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method PaymentSuccess not implemented")
+}
+func (UnimplementedProductServiceServer) OrderHistory(context.Context, *ProductNoParam) (*OrderList, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method OrderHistory not implemented")
+}
+func (UnimplementedProductServiceServer) FindOrder(context.Context, *PrID) (*Order, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method FindOrder not implemented")
+}
+func (UnimplementedProductServiceServer) FIndOrdersByUser(context.Context, *PrID) (*OrderList, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method FIndOrdersByUser not implemented")
 }
 func (UnimplementedProductServiceServer) mustEmbedUnimplementedProductServiceServer() {}
 
@@ -554,6 +599,60 @@ func _ProductService_PaymentSuccess_Handler(srv interface{}, ctx context.Context
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ProductService_OrderHistory_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ProductNoParam)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProductServiceServer).OrderHistory(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ProductService_OrderHistory_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProductServiceServer).OrderHistory(ctx, req.(*ProductNoParam))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ProductService_FindOrder_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PrID)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProductServiceServer).FindOrder(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ProductService_FindOrder_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProductServiceServer).FindOrder(ctx, req.(*PrID))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ProductService_FIndOrdersByUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PrID)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProductServiceServer).FIndOrdersByUser(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ProductService_FIndOrdersByUser_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProductServiceServer).FIndOrdersByUser(ctx, req.(*PrID))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // ProductService_ServiceDesc is the grpc.ServiceDesc for ProductService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -620,6 +719,18 @@ var ProductService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "PaymentSuccess",
 			Handler:    _ProductService_PaymentSuccess_Handler,
+		},
+		{
+			MethodName: "OrderHistory",
+			Handler:    _ProductService_OrderHistory_Handler,
+		},
+		{
+			MethodName: "FindOrder",
+			Handler:    _ProductService_FindOrder_Handler,
+		},
+		{
+			MethodName: "FIndOrdersByUser",
+			Handler:    _ProductService_FIndOrdersByUser_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

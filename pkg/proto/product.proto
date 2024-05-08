@@ -23,6 +23,23 @@ service ProductService {
 
     rpc CreatePayment(Bid) returns(PaymentResponse);
     rpc PaymentSuccess(Payment) returns(ProductResponse);
+
+    rpc OrderHistory(ProductNoParam) returns(OrderList);
+    rpc FindOrder(PrID) returns(Order);
+    rpc FIndOrdersByUser(PrID) returns(OrderList);
+}
+
+message OrderList {
+    repeated Order Orders = 1;
+}
+
+message Order {
+    uint32 Order_ID = 1;
+    uint32 User_ID = 2;
+    uint32 Seller_ID = 3;
+    uint32 Product_ID = 4;
+    float Amount = 5;
+    string Payment_ID = 6;
 }
 
 message PaymentResponse {

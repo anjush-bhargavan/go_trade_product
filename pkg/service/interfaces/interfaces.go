@@ -23,4 +23,8 @@ type ProductServiceInter interface{
 
 	PaymentService(p *pb.Bid) (*pb.PaymentResponse, error)
 	PaymentSuccessService(p *pb.Payment) (*pb.ProductResponse, error)
+
+	FindAllOrdersSvc(p *pb.ProductNoParam) (*pb.OrderList, error)
+	FindOrdersByUserSvc(p *pb.PrID) (*pb.OrderList, error)
+	FindOrderSvc(p *pb.PrID) (*pb.Order, error)
 }
