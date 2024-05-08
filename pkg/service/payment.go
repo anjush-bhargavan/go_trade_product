@@ -104,9 +104,9 @@ func (a *ProductService) PaymentSuccessService(p *pb.Payment) (*pb.ProductRespon
 
 	ctx := context.Background()
 
-	transactionName := fmt.Sprintf("product, %v sold", product.Name)
+	transactionName := fmt.Sprintf("product, %v sold to %d", product.Name,p.User_ID)
 	transaction := &userpb.Transaction{
-		User_ID: p.User_ID,
+		User_ID: uint32(product.SellerID),
 		Name:    transactionName,
 		Amount:  userAmount,
 	}
